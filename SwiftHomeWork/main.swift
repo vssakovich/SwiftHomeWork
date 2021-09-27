@@ -7,191 +7,69 @@
 
 import Foundation
 
-struct SportCar {
+class Car {
     let name: String
-    let year: Int
+    var year: Int
     let color: String
     var mileage: Int
-    let trunkCapacity: Double
-    var trunkFullness: Double
     let engineCapacity: Double
-    let doorNumber: Int
+    var doorState: DoorActions
+    var windowState: WindowActions
+    var engineState: EngineActions
     
-    var doorState: DoorActions {
-        willSet {
-            newValue == .open ? print("Двери открываются") : print("Двери закрываются")
-        }
+    init(name: String, year: Int, color: String, mileage: Int, engineCapacity: Double, doorState: DoorActions, windowState: WindowActions, engineState: EngineActions) {
+        self.name = name
+        self.year = year
+        self.color = color
+        self.mileage = mileage
+        self.engineCapacity = engineCapacity
+        self.doorState = doorState
+        self.windowState = windowState
+        self.engineState = engineState
     }
     
-    mutating func openDoors () {
-        if self.doorState == .open {
-            print("Двери \(name) уже открыты")
-        } else {
-        self.doorState = .open
-        print("Двери \(name) открыты")
-        }
-    }
-    
-    mutating func closeDoors () {
-        if self.doorState == .close {
-            print("Двери \(name) уже закрыты")
-        } else {
-        self.doorState = .close
-        print("Двери \(name) закрыты")
-        }
-    }
-    
-    var windowState: WindowActions {
-        willSet {
-            newValue == .open ? print("Окна открываются") : print("Окна закрываются")
-        }
-    }
-    
-    mutating func openWindows () {
-        if self.windowState == .open {
-            print("Окна \(name) уже открыты")
-        } else {
-        self.windowState = .open
-        print("Окна \(name) открыты")
-        }
-    }
-    
-    mutating func closeWindows () {
-        if self.windowState == .close {
-            print("Окна \(name) уже закрыты")
-        } else {
-        self.windowState = .close
-        print("Окна \(name) закрыты")
-        }
-    }
-    
-    var engineState: EngineActions {
-        willSet {
-            newValue == .turnOn ? print("Двигатель заводится") : print("Двигатель заглушается")
-        }
-    }
-    
-    mutating func turnOnEngine() {
-        if self.engineState == .turnOn {
-            print("Двигатель \(name) уже запущен")
-        } else {
-        self.engineState = .turnOn
-        print("Двигатель \(name) запущен")
-        }
-    }
-    
-    mutating func turnOffEngine() {
-        if self.engineState == .turnOff {
-            print("Двигатель \(name) уже заглушен")
-        } else {
-        self.engineState = .turnOff
-        print("Двигатель \(name) заглушен")
-        }
-    }
-
-   mutating func checkTrunkStatus(_ cargo: Double) {
-        if trunkFullness == trunkCapacity {
-            print("Багажник заполнен, груз не влезет")
-        } else if cargo <= trunkCapacity - trunkFullness {
-            trunkFullness += cargo
-            print("Груз погружен")
-        } else {
-            print("Груз слишком большой")
-        }
+    func printGeneralCharacts() {
+        print("Имя \(name), год выпуска \(year), цвет \(color), пробег \(mileage), объем двигателя \(engineCapacity)")
     }
 }
 
-struct TrunkCar {
-    let name: String
-    let year: Int
-    let color: String
-    var mileage: Int
-    let trunkCapacity: Double
-    var trunkFullness: Double
-    let engineCapacity: Double
+final class TrunkCar: Car {
+    let loadCapacity: Double
+    let cargoType: String
+    let bodyType: String
+    var trunkState: TrunkActions
     
-    var doorState: DoorActions {
-        willSet {
-            newValue == .open ? print("Двери открываются") : print("Двери закрываются")
-        }
+    init(name: String, year: Int, color: String, mileage: Int, engineCapacity: Double, doorState: DoorActions, windowState: WindowActions, engineState: EngineActions, loadCapacity: Double, cargoType: String, bodyType: String, trunkState: TrunkActions) {
+        self.loadCapacity = loadCapacity
+        self.cargoType = cargoType
+        self.bodyType = bodyType
+        self.trunkState = trunkState
+        super.init(name: name, year: year, color: color, mileage: mileage, engineCapacity: engineCapacity, doorState: doorState, windowState: windowState, engineState: engineState)
     }
     
-    mutating func openDoors () {
-        if self.doorState == .open {
-            print("Двери \(name) уже открыты")
-        } else {
-        self.doorState = .open
-        print("Двери \(name) открыты")
-        }
+    override func printGeneralCharacts() {
+        print("Особенности грузового автомобиля: грузоподъемность \(loadCapacity), тип груза \(cargoType), тип кузова \(bodyType), состояние кузова \(trunkState)")
+    }
+}
+
+final class SportCar: Car {
+    let doorNumber: Int
+    let carClass: String
+    let safityRating: Int
+    var hatchState: HatchActions
+    
+    init(name: String, year: Int, color: String, mileage: Int, engineCapacity: Double, doorState: DoorActions, windowState: WindowActions, engineState: EngineActions, doorNumber: Int, carClass: String, safityRating: Int, hatchState: HatchActions) {
+        self.doorNumber = doorNumber
+        self.carClass = carClass
+        self.safityRating = safityRating
+        self.hatchState = hatchState
+        super.init(name: name, year: year, color: color, mileage: mileage, engineCapacity: engineCapacity, doorState: doorState, windowState: windowState, engineState: engineState)
     }
     
-    mutating func closeDoors () {
-        if self.doorState == .close {
-            print("Двери \(name) уже закрыты")
-        } else {
-        self.doorState = .close
-        print("Двери \(name) закрыты")
-        }
+    override func printGeneralCharacts() {
+        super.printGeneralCharacts()
+        print("Особенности легкового автомобиля: количество дверей \(doorNumber), класс машины \(carClass), уровень безопасности \(safityRating), состояние люка \(hatchState)")
     }
-    
-    var windowState: WindowActions {
-        willSet {
-            newValue == .open ? print("Окна открываются") : print("Окна закрываются")
-        }
-    }
-    
-    mutating func openWindows () {
-        if self.windowState == .open {
-            print("Окна \(name) уже открыты")
-        } else {
-        self.windowState = .open
-        print("Окна \(name) открыты")
-        }
-    }
-    
-    mutating func closeWindows () {
-        if self.windowState == .close {
-            print("Окна \(name) уже закрыты")
-        } else {
-        self.windowState = .close
-        print("Окна \(name) закрыты")
-        }
-    }
-    
-    var engineState: EngineActions {
-        willSet {
-            newValue == .turnOn ? print("Двигатель заводится") : print("Двигатель заглушается")
-        }
-    }
-    
-    mutating func turnOnEngine() {
-        if self.engineState == .turnOn {
-            print("Двигатель \(name) уже запущен")
-        } else {
-        self.engineState = .turnOn
-        print("Двигатель \(name) запущен")
-        }
-    }
-    
-    mutating func turnOffEngine() {
-        if self.engineState == .turnOff {
-            print("Двигатель \(name) уже заглушен")
-        } else {
-        self.engineState = .turnOff
-        print("Двигатель \(name) заглушен")
-        }
-    }
-    
-    mutating func checkTrunkStatus(_ cargo: Double) {
-         if trunkFullness == trunkCapacity {
-             print("Багажник заполнен, груз не влезет")
-         } else if cargo <= trunkCapacity - trunkFullness {
-             trunkFullness += cargo
-             print("Груз погружен")
-         } else {
-             print("Груз слишком большой")
-         }
-     }
 }
 
 enum DoorActions: String {
@@ -204,22 +82,34 @@ enum WindowActions: String {
     case close = "Окна закрыты"
 }
 
-enum TrunkActions: String {
-    case load = "Багажник загружен"
-    case unload = "Багажник разгружен"
-}
-
 enum EngineActions: String {
     case turnOn = "Двигатель запущен"
     case turnOff = "Двигатель заглушен"
 }
 
-var mercSprinter = SportCar(name: "Mercedes", year: 1997, color: "White", mileage: 200000, trunkCapacity: 25, trunkFullness: 12, engineCapacity: 190, doorNumber: 4, doorState: DoorActions.open, windowState: WindowActions.close, engineState: EngineActions.turnOff)
+enum TrunkActions: String {
+    case load = "Груз загружен"
+    case unload = "Груз разгружен"
+}
 
-print(mercSprinter.name, mercSprinter.color)
-mercSprinter.checkTrunkStatus(14)
-mercSprinter.checkTrunkStatus(13)
-mercSprinter.closeDoors()
-mercSprinter.closeWindows()
-mercSprinter.turnOnEngine()
+enum HatchActions: String {
+    case open = "Люк открыт"
+    case close = "Люк закрыт"
+}
+
+var car = Car(name: "KIA", year: 2020, color: "Black", mileage: 20, engineCapacity: 100, doorState: .close, windowState: .close, engineState: .turnOff)
+
+var trunkCar = TrunkCar(name: "KIA", year: 2000, color: "Grey", mileage: 200000, engineCapacity: 100, doorState: .close, windowState: .close, engineState: .turnOn, loadCapacity: 500, cargoType: "Кирпич", bodyType: "Прицеп", trunkState: .unload)
+
+var sportCar = SportCar(name: "KIA", year: 2021, color: "White", mileage: 20, engineCapacity: 100, doorState: .close, windowState: .close, engineState: .turnOff, doorNumber: 4, carClass: "S", safityRating: 89, hatchState: .close)
+
+car.printGeneralCharacts()
+trunkCar.printGeneralCharacts()
+sportCar.printGeneralCharacts()
+
+trunkCar.doorState = .open
+
+sportCar.year = 2017
+print(sportCar.year)
+
 
