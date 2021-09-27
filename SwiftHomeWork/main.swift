@@ -7,109 +7,188 @@
 
 import Foundation
 
-class Car {
-    let name: String
-    var year: Int
-    let color: String
-    var mileage: Int
-    let engineCapacity: Double
-    var doorState: DoorActions
-    var windowState: WindowActions
-    var engineState: EngineActions
+protocol CarProtocol {
+    var model: String { get set }
+    var year: Int { get set }
+    var color: String { get set }
+    var mileage: Int { get set }
+    var trunkCapacity: Double { get set }
+    var engineCapacity: Double { get set }
+    var doorsState: DoorActions { get set }
+    var windowsState: WindowActions { get set }
+    var engineState: EngineActions { get set }
     
-    init(name: String, year: Int, color: String, mileage: Int, engineCapacity: Double, doorState: DoorActions, windowState: WindowActions, engineState: EngineActions) {
-        self.name = name
-        self.year = year
-        self.color = color
-        self.mileage = mileage
-        self.engineCapacity = engineCapacity
-        self.doorState = doorState
-        self.windowState = windowState
-        self.engineState = engineState
+    func doSmthWithCar()
+}
+
+enum DoorActions {
+    case open
+    case close
+}
+
+enum WindowActions {
+    case open
+    case close
+}
+
+enum EngineActions {
+    case turnOn
+    case turnOff
+}
+
+extension CarProtocol {
+    mutating func openDoors() {
+        if self.doorsState == .open {
+            print("Двери \(model) уже открыты")
+        } else {
+        self.doorsState = .open
+        print("Двери \(model) открыты")
+        }
     }
-    
-    func printGeneralCharacts() {
-        print("Имя \(name), год выпуска \(year), цвет \(color), пробег \(mileage), объем двигателя \(engineCapacity)")
+    mutating func closeDoors() {
+        if self.doorsState == .close {
+            print("Двери \(model) уже закрыты")
+        } else {
+        self.doorsState = .close
+        print("Двери \(model) закрыты")
+        }
     }
 }
 
-final class TrunkCar: Car {
+extension CarProtocol {
+    mutating func openWindows() {
+        if self.windowsState == .open {
+            print("Окна \(model) уже открыты")
+        } else {
+        self.windowsState = .open
+        print("Окна \(model) открыты")
+        }
+    }
+    mutating func closeWindows() {
+        if self.windowsState == .close {
+            print("Окна \(model) уже закрыты")
+        } else {
+        self.windowsState = .close
+        print("Окна \(model) закрыты")
+        }
+    }
+}
+
+extension CarProtocol {
+    mutating func turnOnEngine() {
+        if self.engineState == .turnOn {
+            print("Двигатель \(model) уже запущен")
+        } else {
+        self.engineState = .turnOn
+        print("Двигатель \(model) запущен")
+        }
+    }
+    mutating func turnOffEngine() {
+        if self.engineState == .turnOff {
+            print("Двигатель \(model) уже заглушен")
+        } else {
+        self.engineState = .turnOff
+        print("Двигатель \(model) заглушен")
+        }
+    }
+}
+
+final class TrunkCar: CarProtocol {
+    var model: String
+    
+    var year: Int
+    
+    var color: String
+    
+    var mileage: Int
+    
+    var trunkCapacity: Double
+    
+    var engineCapacity: Double
+    
+    var doorsState: DoorActions
+    
+    var windowsState: WindowActions
+    
+    var engineState: EngineActions
+    
     let loadCapacity: Double
     let cargoType: String
     let bodyType: String
-    var trunkState: TrunkActions
     
-    init(name: String, year: Int, color: String, mileage: Int, engineCapacity: Double, doorState: DoorActions, windowState: WindowActions, engineState: EngineActions, loadCapacity: Double, cargoType: String, bodyType: String, trunkState: TrunkActions) {
+    func doSmthWithCar() { }
+    
+    init(model: String, year: Int, color: String, mileage: Int, trunkCapacity: Double, engineCapacity: Double, doorsState: DoorActions, windowsState: WindowActions, engineState: EngineActions, loadCapacity: Double, cargoType: String, bodyType: String) {
+        self.model = model
+        self.year = year
+        self.color = color
+        self.mileage = mileage
+        self.trunkCapacity = trunkCapacity
+        self.engineCapacity = engineCapacity
+        self.doorsState = doorsState
+        self.windowsState = windowsState
+        self.engineState = engineState
         self.loadCapacity = loadCapacity
         self.cargoType = cargoType
         self.bodyType = bodyType
-        self.trunkState = trunkState
-        super.init(name: name, year: year, color: color, mileage: mileage, engineCapacity: engineCapacity, doorState: doorState, windowState: windowState, engineState: engineState)
-    }
-    
-    override func printGeneralCharacts() {
-        print("Особенности грузового автомобиля: грузоподъемность \(loadCapacity), тип груза \(cargoType), тип кузова \(bodyType), состояние кузова \(trunkState)")
     }
 }
 
-final class SportCar: Car {
+final class SportCar: CarProtocol {
+    var model: String
+    
+    var year: Int
+    
+    var color: String
+    
+    var mileage: Int
+    
+    var trunkCapacity: Double
+    
+    var engineCapacity: Double
+    
+    var doorsState: DoorActions
+    
+    var windowsState: WindowActions
+    
+    var engineState: EngineActions
+    
     let doorNumber: Int
     let carClass: String
     let safityRating: Int
-    var hatchState: HatchActions
     
-    init(name: String, year: Int, color: String, mileage: Int, engineCapacity: Double, doorState: DoorActions, windowState: WindowActions, engineState: EngineActions, doorNumber: Int, carClass: String, safityRating: Int, hatchState: HatchActions) {
+    func doSmthWithCar() { }
+    
+    init(model: String, year: Int, color: String, mileage: Int, trunkCapacity: Double, engineCapacity: Double, doorsState: DoorActions, windowsState: WindowActions, engineState: EngineActions, doorNumber: Int, carClass: String, safityRating: Int) {
+        self.model = model
+        self.year = year
+        self.color = color
+        self.mileage = mileage
+        self.trunkCapacity = trunkCapacity
+        self.engineCapacity = engineCapacity
+        self.doorsState = doorsState
+        self.windowsState = windowsState
+        self.engineState = engineState
         self.doorNumber = doorNumber
         self.carClass = carClass
         self.safityRating = safityRating
-        self.hatchState = hatchState
-        super.init(name: name, year: year, color: color, mileage: mileage, engineCapacity: engineCapacity, doorState: doorState, windowState: windowState, engineState: engineState)
-    }
-    
-    override func printGeneralCharacts() {
-        super.printGeneralCharacts()
-        print("Особенности легкового автомобиля: количество дверей \(doorNumber), класс машины \(carClass), уровень безопасности \(safityRating), состояние люка \(hatchState)")
     }
 }
 
-enum DoorActions: String {
-    case open = "Двери открыты"
-    case close = "Двери закрыты"
-}
+protocol CustomStringConvertibleProtocol { }
 
-enum WindowActions: String {
-    case open = "Окна открыты"
-    case close = "Окна закрыты"
-}
+extension TrunkCar: CustomStringConvertibleProtocol { }
+extension SportCar: CustomStringConvertibleProtocol { }
 
-enum EngineActions: String {
-    case turnOn = "Двигатель запущен"
-    case turnOff = "Двигатель заглушен"
-}
+var trunkCar = TrunkCar(model: "Citroen", year: 2000, color: "Grey", mileage: 100000, trunkCapacity: 500, engineCapacity: 80, doorsState: .close, windowsState: .close, engineState: .turnOff, loadCapacity: 500, cargoType: "Кирпич", bodyType: "Кузов")
 
-enum TrunkActions: String {
-    case load = "Груз загружен"
-    case unload = "Груз разгружен"
-}
+var sportCar = SportCar(model: "KIA", year: 2020, color: "Black", mileage: 20, trunkCapacity: 50, engineCapacity: 110, doorsState: .open, windowsState: .open, engineState: .turnOff, doorNumber: 4, carClass: "S", safityRating: 89)
 
-enum HatchActions: String {
-    case open = "Люк открыт"
-    case close = "Люк закрыт"
-}
+trunkCar.openDoors()
+trunkCar.closeWindows()
+trunkCar.turnOffEngine()
 
-var car = Car(name: "KIA", year: 2020, color: "Black", mileage: 20, engineCapacity: 100, doorState: .close, windowState: .close, engineState: .turnOff)
-
-var trunkCar = TrunkCar(name: "KIA", year: 2000, color: "Grey", mileage: 200000, engineCapacity: 100, doorState: .close, windowState: .close, engineState: .turnOn, loadCapacity: 500, cargoType: "Кирпич", bodyType: "Прицеп", trunkState: .unload)
-
-var sportCar = SportCar(name: "KIA", year: 2021, color: "White", mileage: 20, engineCapacity: 100, doorState: .close, windowState: .close, engineState: .turnOff, doorNumber: 4, carClass: "S", safityRating: 89, hatchState: .close)
-
-car.printGeneralCharacts()
-trunkCar.printGeneralCharacts()
-sportCar.printGeneralCharacts()
-
-trunkCar.doorState = .open
-
-sportCar.year = 2017
-print(sportCar.year)
-
+sportCar.closeDoors()
+sportCar.closeWindows()
+sportCar.turnOnEngine()
 
