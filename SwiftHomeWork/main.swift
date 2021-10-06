@@ -7,51 +7,45 @@
 
 import Foundation
 
-enum BankUsersError {
-    case error
-}
-
-enum CashWithdrawn: Error {
-    case nameError
-    case moneyAmountError
-}
-
-struct BankUsersParameters {
-    var name: String
-    var deposit: Int
-}
-
-final class BankUsers {
-    var usersAndDeposits = ["Анна Иванова": BankUsersParameters(name: "Анна Иванова", deposit: 56890),
-                            "Петр Сидоров": BankUsersParameters(name: "Петр Сидоров", deposit: 33446),
-                            "Алексей Петров": BankUsersParameters(name: "Алексей Петров", deposit: 568895)]
-
-    func checkAverageDeposit() -> (Double, BankUsersError?) {
-        guard usersAndDeposits.count > 0 else { return (0, BankUsersError.error) }
-        var totalDepositsSum: Double = 0
-        for (_, deposit) in usersAndDeposits {
-            totalDepositsSum += Double(deposit.deposit)
-        }
-        return ((totalDepositsSum / Double(usersAndDeposits.count)), nil)
+struct Queue<T> {
+    var elements: [T] = []
+    
+    mutating func addElement(_ value: T) {
+        elements.append(value)
     }
     
-    func withdrawnMoneyFromDeposit(_ name: String, _ moneyAmount: Int) throws {
-        guard var user = usersAndDeposits[name] else { throw CashWithdrawn.nameError }
-        guard moneyAmount <= user.deposit else { throw CashWithdrawn.moneyAmountError }
-        user.deposit -= moneyAmount
-        print("Деньги были сняты со счета")
+    mutating func removeFirstElement() {
+        elements.removeFirst()
+    }
+    
+    mutating func sortQueue(queue: Queue, closure: (T) -> Bool) -> [T] {
+        var sortedQueue = [T]()
+        for element in queue.elements {
+            if closure(element) {
+                sortedQueue.append(element)
+            }
         }
+        return sortedQueue
+    }
+    
+    subscript(index: Int) -> T? {
+        switch true {
+        case index <= elements.count:
+            return elements[index]
+        default:
+            return nil
+        }
+    }
 }
 
-var users = BankUsers()
-print(users.checkAverageDeposit())
+var users = Queue(elements: ["Владислав" ,"Максим", "Валерия", "Татьяна", "Михаил", "Мария"])
 
-try? users.withdrawnMoneyFromDeposit("Петр Сидоров", 5666)
+var wallet = Queue(elements: [1000, 100, 2000, 5000, 1000, 5000])
+ 
+var sortedWallet = wallet.sortQueue(queue: wallet, closure: { element in element >= 1000 && element <= 2000})
 
-do {
-    try users.withdrawnMoneyFromDeposit("Петр Сидоров", 700000009)
-} catch CashWithdrawn.moneyAmountError {
-    print("Недостаточно денег")
-} catch CashWithdrawn.nameError {
-    print("Неправильное имя пользователя")
-}
+print(sortedWallet)
+
+var sortedUsers = users.sortQueue(queue: users, closure: { element in element.hasPrefix("М") })
+
+print(sortedUsers)
